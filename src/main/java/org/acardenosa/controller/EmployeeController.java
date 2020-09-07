@@ -5,7 +5,9 @@ import java.util.List;
 import org.acardenosa.exception.ResourceNotFoundException;
 import org.acardenosa.model.Employee;
 import org.acardenosa.repository.EmployeeRepository;
+import org.acardenosa.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,12 +26,19 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
+	@Autowired
+	EmployeeService employeeService;
 	
+//	@GetMapping("/employees")
+//	public List<Employee> getAllEmployees(){
+//		return employeeRepository.findAll();
+//	}
+//	
 	@GetMapping("/employees")
-	public List<Employee> getAllEmployees(){
-		return employeeRepository.findAll();
+	public ResponseEntity<List<Employee>> get(){
+		List<Employee> employee = employeeService.findAll();
+		return new ResponseEntity<List<Employee>>(employee, HttpStatus.OK);
 	}
-	
 	@GetMapping("/employees/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable(value="id") Long employeeId)
 			throws ResourceNotFoundException{
